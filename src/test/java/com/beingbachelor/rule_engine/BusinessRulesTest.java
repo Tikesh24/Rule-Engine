@@ -17,9 +17,9 @@ class BusinessRulesTest {
     /*
      *   Test BRs
      *   1. Rule1: Input must be longer than 5 characters
-     *   2. Rule2: Input must contain 7Eleven
-     *   3. Rule3: Input must contain GSC
-     *   4. Rule4: Input must contain 711
+     *   2. Rule2: Input must contain Business
+     *   3. Rule3: Input must contain global
+     *   4. Rule4: Input must contain 911
      */
 
     private RuleEngine<String> ruleEngine;
@@ -39,7 +39,7 @@ class BusinessRulesTest {
     @Test
     @DisplayName("1. Success: All rules passed (stopOnAnyFailure = false)")
     public void brSuccess() throws InterruptedException {
-        String testString = "7Eleven GSC 711";
+        String testString = "Business global 911";
         Map<String, String> run = ruleEngine.runAndCollectFailures(testString);
         assertEquals(0, run.size());
     }
@@ -53,9 +53,9 @@ class BusinessRulesTest {
         assertEquals(4, run.size());
 
         assertEquals("Input must be longer than 5 characters : false", run.get("CheckRule1"));
-        assertEquals("Input must contain 7Eleven : false", run.get("CheckRule2"));
-        assertEquals("Input must contain GSC : false", run.get("CheckRule3"));
-        assertEquals("Input must contain 711 : false", run.get("CheckRule4"));
+        assertEquals("Input must contain Business : false", run.get("CheckRule2"));
+        assertEquals("Input must contain global : false", run.get("CheckRule3"));
+        assertEquals("Input must contain 911 : false", run.get("CheckRule4"));
     }
 
     @Test
@@ -66,9 +66,9 @@ class BusinessRulesTest {
 
         assertEquals(3, run.size());
 
-        assertEquals("Input must contain 7Eleven : false", run.get("CheckRule2"));
-        assertEquals("Input must contain GSC : false", run.get("CheckRule3"));
-        assertEquals("Input must contain 711 : false", run.get("CheckRule4"));
+        assertEquals("Input must contain Business : false", run.get("CheckRule2"));
+        assertEquals("Input must contain global : false", run.get("CheckRule3"));
+        assertEquals("Input must contain 911 : false", run.get("CheckRule4"));
     }
 
     @Test
@@ -80,13 +80,13 @@ class BusinessRulesTest {
 
         assertEquals(1, run.size());
         assertTrue(run.containsKey("CheckRule2"));
-        assertEquals("Input must contain 7Eleven : false", run.get("CheckRule2"));
+        assertEquals("Input must contain Business : false", run.get("CheckRule2"));
     }
 
     @Test
-    @DisplayName("5. Success (Compound - AND ): Rule 1 passed (len > 5), Rule 2 passed (contains 7Eleven)")
+    @DisplayName("5. Success (Compound - AND ): Rule 1 passed (len > 5), Rule 2 passed (contains Business)")
     public void brSuccess_compound_R1_AND_R2() throws InterruptedException {
-        String testString = "This store has 7Eleven";
+        String testString = "This store has Business";
         ruleEngine = new RuleEngine<>(true);
         ruleEngine.addRule(brEngine.checkRule1.and(brEngine.checkRule2));
         Map<String, String> stringStringMap = ruleEngine.runAndCollectFailures(testString);
@@ -103,13 +103,13 @@ class BusinessRulesTest {
 
         assertEquals(1, run.size());
         assertTrue(run.values().iterator().next()
-                .contains("Input must be longer than 5 characters : false and Input must contain 7Eleven : false"));
+                .contains("Input must be longer than 5 characters : false and Input must contain Business : false"));
     }
 
     @Test
-    @DisplayName("7. Success (Compound - OR ): Rule 1 passed (len > 5), Rule 2 passed (contains 7Eleven)")
+    @DisplayName("7. Success (Compound - OR ): Rule 1 passed (len > 5), Rule 2 passed (contains Business)")
     public void brSuccess_compound_R1_OR_R2() throws InterruptedException {
-        String testString = "This store has 7Eleven";
+        String testString = "This store has Business";
         ruleEngine = new RuleEngine<>(true);
         ruleEngine.addRule(brEngine.checkRule1.or(brEngine.checkRule2));
         Map<String, String> stringStringMap = ruleEngine.runAndCollectFailures(testString);
@@ -117,7 +117,7 @@ class BusinessRulesTest {
     }
 
     @Test
-    @DisplayName("8. Success (Compound - OR ): Rule 1 passed (len > 5), Rule 2 Fail (not contains 7Eleven)")
+    @DisplayName("8. Success (Compound - OR ): Rule 1 passed (len > 5), Rule 2 Fail (not contains Business)")
     public void brSuccess_compound_R1_OR_R2Fail() throws InterruptedException {
         String testString = "This store has Speedways";
         ruleEngine = new RuleEngine<>(true);
@@ -127,9 +127,9 @@ class BusinessRulesTest {
     }
 
     @Test
-    @DisplayName("9. Failure (Compound - OR ): Rule 2 passed (not contains 7Eleven), Rule 3 passed (contains GSC)")
+    @DisplayName("9. Failure (Compound - OR ): Rule 2 passed (not contains Business), Rule 3 passed (contains global)")
     public void brSuccess_compound_R1Fail_OR_R2() throws InterruptedException {
-        String testString = "This store has GSC";
+        String testString = "This store has global";
         ruleEngine = new RuleEngine<>(true);
         ruleEngine.addRule(brEngine.checkRule2.or(brEngine.checkRule3));
         Map<String, String> stringStringMap = ruleEngine.runAndCollectFailures(testString);
@@ -146,11 +146,11 @@ class BusinessRulesTest {
 
         assertEquals(1, run.size());
         assertTrue(run.values().iterator().next()
-                .contains("Input must contain 7Eleven : false OR Input must contain GSC : false"));
+                .contains("Input must contain Business : false OR Input must contain global : false"));
     }
 
     @Test
-    @DisplayName("11. Success (Compound - negate ): Rule 2 failed (not contains 7Eleven) ")
+    @DisplayName("11. Success (Compound - negate ): Rule 2 failed (not contains Business) ")
     public void brSuccess_compound_R1Fail_Negate() throws InterruptedException {
         String testString = "This store has Fuels";
         ruleEngine = new RuleEngine<>();

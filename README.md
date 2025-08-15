@@ -36,8 +36,8 @@ Rule<String> rule1 = Rule.createRule(
 );
 
 Rule<String> rule2 = Rule.createRule(
-    input -> input.contains("7Eleven"),
-    "Input must contain '7Eleven'",
+    input -> input.contains("Jump above the sky"),
+    "Input must contain 'Jump above the sky'",
     true // Stop on failure
 );
 ```
@@ -59,7 +59,7 @@ To run the rules on a specific input, initialize a RuleEngine, add the desired r
 RuleEngine<String> engine = new RuleEngine<>();
 engine.addRule(rule1).addRule(rule2);
 
-List<String> results = engine.run("7Eleven Store");
+List<String> results = engine.run("Jump above the sky");
 
 if (results.isEmpty()) {
     System.out.println("All rules passed.");
@@ -95,7 +95,7 @@ public void testRulesSuccess() throws InterruptedException {
     RuleEngine<String> engine = new RuleEngine<>(2);
     engine.addRule(rule1).addRule(rule2);
 
-    List<String> results = engine.run("7Eleven Store");
+    List<String> results = engine.run("Jump above the sky");
     assertTrue(results.isEmpty());
 }
 ```
